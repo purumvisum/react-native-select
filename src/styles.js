@@ -14,8 +14,9 @@ export default ({
         alignSelf: 'stretch',
         justifyContent: 'center',
         height: 3000,
-        zIndex: 99999,
+        zIndex: 9,
         padding: 30,
+        backgroundColor: '#E5E5E5'
     },
 
     selectInputText: {
@@ -64,6 +65,7 @@ export default ({
         right: 0,
         top: 10,
         flex:1,
+        zIndex: 10
     },
 
     arrowIcon: {
