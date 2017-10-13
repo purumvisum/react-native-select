@@ -16,8 +16,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const React = require('react');
 
-import styles from './styles';
+import stylesDefault from './styles';
 import Option from './option';
+
+
 
 export default class Select  extends React.PureComponent {
 
@@ -34,11 +36,15 @@ export default class Select  extends React.PureComponent {
             spinValue: new Animated.Value(0),
             openSelect: false,
             selectedValue: this.props.data[0],
+            topOffset: this.props.topOffset ? this.props.topOffset : 80
         };
 
         this._toggleOptions = this._toggleOptions.bind(this);
         this._renderItemComponent = this._renderItemComponent.bind(this);
         this._onSelectInputPress = this._onSelectInputPress.bind(this);
+
+       this.styles =  Object.assign(stylesDefault, this.props.styles);
+
     }
 
     _toggleOptions() {
@@ -59,7 +65,7 @@ export default class Select  extends React.PureComponent {
                     }),
                 Animated.timing(
                     this.state.animatedTopPos, {
-                        toValue: this.state.openSelect ? 80 : 60,
+                        toValue: this.state.openSelect ? this.state.topOffset : this.state.topOffset - 20,
                         duration: 500
                     }),
                 Animated.timing(
@@ -113,83 +119,80 @@ export default class Select  extends React.PureComponent {
 
 
         return (
-        <View
-            style = {{
-                zIndex: 999999,
-            }}
+            <View
+                style = {{
+                    zIndex: 999999,
+                }}
 
-        >
-
-            <TouchableWithoutFeedback
-                onPress = { this._onSelectInputPress }>
-                <View
-                    style = { [styles.selectInput] }
-                >
-                    <Text style = { [styles.selectInputText]}>
-                        {this.state.selectedValue}
-                    </Text>
-                </View>
-
-
-            </TouchableWithoutFeedback>
-
-            { Platform.OS !== 'ios' &&
-            <Modal
-                presentationStyle = 'overFullScreen'
-                animationType="slide"
-                transparent={true}
-                visible={this.state.openSelect}
-                supportedOrientations={['portrait', 'landscape-right', 'landscape-left']}
-                onRequestClose={() => { return true }}
             >
-                <View style = {[styles.androidModalBg]}>
-                    <View style = {[styles.androidModal]}>
-                        <FlatList
-                            data={this.props.data}
-                            renderItem={this._renderItemComponent}
-                            keyExtractor={(item, index) => item.item}
-                        />
+
+                <TouchableWithoutFeedback
+                    onPress = { this._onSelectInputPress }>
+                    <View
+                        style = {[this.styles.selectInput]}
+                    >
+                        <Text style = { [this.styles.selectInputText]}>
+                            {this.state.selectedValue}
+                        </Text>
                     </View>
-                </View>
-            </Modal>
-            }
+                </TouchableWithoutFeedback>
+
+                { Platform.OS !== 'ios' &&
+                <Modal
+                    presentationStyle = 'overFullScreen'
+                    animationType="slide"
+                    transparent={true}
+                    visible={this.state.openSelect}
+                    supportedOrientations={['portrait', 'landscape-right', 'landscape-left']}
+                    onRequestClose={() => { return true }}
+                >
+                    <View style = {[this.styles.androidModalBg]}>
+                        <View style = {[this.styles.androidModal]}>
+                            <FlatList
+                                data={this.props.data}
+                                renderItem={this._renderItemComponent}
+                                keyExtractor={(item, index) => item.item}
+                            />
+                        </View>
+                    </View>
+                </Modal>
+                }
 
 
-            <Animated.View
-                style = {[
-                    {
-                        opacity: this.state.animatedOpacity,
-                        top: this.state.animatedTopPos,
-                        height: this.state.height
-                    },
-                    styles.optionsWrapper
-                ]}>
+                <Animated.View
+                    style = {[
+                        {
+                            opacity: this.state.animatedOpacity,
+                            top: this.state.animatedTopPos,
+                            height: this.state.height
+                        },
+                        this.styles.optionsWrapper
+                    ]}>
 
-                <View style={styles.triangle} />
+                    <View style={this.styles.triangle} />
 
-                <FlatList
-                    data={this.props.data}
-                    renderItem={this._renderItemComponent}
-                    keyExtractor={item => item.index}
-                />
-            </Animated.View>
+                    <FlatList
+                        data={this.props.data}
+                        renderItem={this._renderItemComponent}
+                        keyExtractor={item => item.index}
+                    />
+                </Animated.View>
 
-            <Animated.View
-                style = {[{
-                    transform: [{rotate: spin}]
-                }, styles.arrowIconWrapper]}>
-            <Icon
-                style={[
-                    styles.arrowIcon
-                ]}
-                name={'keyboard-arrow-down'}/>
-        </Animated.View>
+                <Animated.View
+                    style = {[{
+                        transform: [{rotate: spin}]
+                    }, this.styles.arrowIconWrapper]}>
+                    <Icon
+                        style={[
+                            this.styles.arrowIcon
+                        ]}
+                        name={'keyboard-arrow-down'}/>
+                </Animated.View>
 
 
 
-        </View>
+            </View>
 
         );
     }
 }
-
