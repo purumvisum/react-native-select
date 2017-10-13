@@ -1,19 +1,21 @@
 export default ({
-   selectItem : {
-       borderRadius: 5,
-       padding: 10
-   },
+    selectMainWrapper: {
+        flex: 1
+    },
 
-    selectItemText : {
+    selectItem: {
+        borderRadius: 5,
+        padding: 10
+    },
+
+    selectItemText: {
         fontSize: 15,
-        padding: 10,
+        padding: 10
     },
 
     selectInput: {
-        flex: 1,
         alignSelf: 'stretch',
         justifyContent: 'center',
-        height: 3000,
         zIndex: 9,
         padding: 30,
         backgroundColor: '#E5E5E5'
@@ -24,23 +26,28 @@ export default ({
         color: '#000'
     },
 
-    optionsWrapper : {
+    selectInputPlaceholderText: {
+        fontSize: 17,
+        color: '#636363'
+    },
+
+    optionsWrapper: {
         position: 'absolute',
         flex: 1,
         width: '90%',
         marginLeft: '5%',
         zIndex: 999999,
         justifyContent: 'center',
-        alignItems: "stretch",
+        alignItems: 'stretch',
         backgroundColor: '#fff',
         borderRadius: 5,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: .8,
-        shadowRadius: 7,
-
+        shadowOffset: { width: 0,
+            height: 0 },
+        shadowOpacity: 0.8,
+        shadowRadius: 7
     },
-   
+
     triangle: {
         top: -10,
         right: -10,
@@ -58,13 +65,13 @@ export default ({
 
     arrowIconWrapper: {
         backgroundColor: 'transparent',
-        position:'absolute',
+        position: 'absolute',
         justifyContent: 'center',
-        flexDirection: "row",
+        flexDirection: 'row',
         alignSelf: 'center',
         right: 0,
         top: 10,
-        flex:1,
+        flex: 1,
         zIndex: 10
     },
 
