@@ -1,58 +1,119 @@
-# react-native-multiSelect-flatList
-> A simple RN component that can search, open edit block with abilities to select all item, remove selected with animations
+# react-native-select
+> A simple RN component for select items from a list that represented in dropdown on ios and modal window for android
 
 ![Demo](https://github.com/purumvisum/react-native-multiSelect-flatList/blob/master/ice_video_20171005-112420.gif)
 
 
 # Instalation
-`npm install https://github.com/purumvisum/react-native-multiSelect-flatList`
+`npm install https://github.com/purumvisum/react-native-select`
 
 ## Usage
 ```javascript
-import EditableFlatList from 'react-native-multiselect-flatlist';
+import Select from 'react-native-select';
    
-<EditableFlatList
-    itemsList={this.props.sessions}
-    keyExtractor={(item, index) => item.Id}
-    searchBy={(item) => item.Description}
-    orderBy={(item) => item.Description}
-    renderRow={this._renderRow.bind(this)}
-    clickOnRow = {this._selectSession.bind(this)}
-    removeRow={this._exitOrRemoveSession.bind(this)}
-    onRefresh={this.props.updateSessions}
-    preventSelectingActions = {!isOwner} 
-    emptyListText = {'You have no items...'}
-    iconWidth = {40}
-    iconStyles = {{
-         marginLeft: 0
-     }}
-     
- />
+<Select
+    data = {this.state.dataList}
+    onSelect={this.onValueChange.bind(this)}
+    selectOptionsHeight = {200}
+    styles = {stylesSelect}
+/>
 ```
 
 ## Attributes
-### `itemsList` `required`  
-A list of items to dispalay (equivalent for [FlatList data attr](https://facebook.github.io/react-native/docs/flatlist.html))
-### `keyExtractor` `required` 
-keyExtractor tells the list to use the ids for the react keys.(equivalent for [FlatList keyExtractor attr](https://facebook.github.io/react-native/docs/flatlist.html))
-### `searchBy`
-Set item sorting field
-### `orderBy`
-Set item oreder field
-### `renderRow`
-Allow to use your styles and set content of items in row. 
-> Do not use TouchableOpacity, TouchableWithoutFeedback and TouchableHighlight. renderItem method of FlatList already rewrited by module and using touchable elemnts can cancel modle events. To make from EditableFlatList simple FlatList wrap your items to TouchableOpacity, TouchableWithoutFeedback and TouchableHighlight (it will canceled all events).   
-### `clickOnRow`
-Allow to add your custom event on row press. It will be canceled whet editing mode is on.
-### `removeRow`
-Allow to add remove action for list items. 
-### `onRefresh`
-Allow to add refresh action for list items. 
-### `preventSelectingActions`
-Do not apply selecting view for this list. For example whent it is nessessary to check writes for editing
-### `iconWidth`
-Size of icon (when select item). 
-### `iconStyles`
-Extra styles for icon. 
-### `emptyListText`
-Add custom text when your list is empty (default : `No items`)
+### `data` `required` `type: array`  
+A list of items to dispalay
+### `onSelect` `type: function`  
+Determinate what happens when you select value
+### `selectOptionsHeight` `type: number`  
+height off dropdown (IOS only)
+### `styles` `type: Object`  
+Styles for select
+```javascript
+let stylesSelect = {
+   selectItem : {
+       borderRadius: 5,
+       padding: 10
+   },
+
+   selectItemText : {
+       fontSize: 15,
+       padding: 10,
+   },
+
+   selectInput: {
+       flex: 1,
+       alignSelf: 'stretch',
+       justifyContent: 'center',
+       height: 3000,
+       zIndex: 99999,
+       padding: 30,
+       borderBottomWidth: 1,
+       borderBottomColor: '#c0c0c0',
+       backgroundColor: 'green'
+   },
+
+   selectInputText: {
+       fontSize: 17,
+       color: '#fff'
+   },
+
+   optionsWrapper : {
+       position: 'absolute',
+       flex: 1,
+       width: '100%',
+       zIndex: 999999,
+       alignItems: "stretch",
+       backgroundColor: '#fff',
+       borderRadius: 5,
+   },
+   triangle: {
+       top: -10,
+       right: -10,
+       width: 0,
+       height: 0,
+       backgroundColor: 'transparent',
+       borderStyle: 'solid',
+       borderLeftWidth: 15,
+       borderRightWidth: 15,
+       borderBottomWidth: 15,
+       borderLeftColor: 'transparent',
+       borderRightColor: 'transparent',
+       borderBottomColor: '#fff'
+   },
+
+   arrowIconWrapper: {
+       backgroundColor: 'transparent',
+       position:'absolute',
+       justifyContent: 'center',
+       flexDirection: "row",
+       alignSelf: 'center',
+       right: 0,
+       top: 10,
+       flex:1,
+   },
+
+   arrowIcon: {
+       color: '#295DA5',
+       fontSize: 40
+   },
+
+   androidModalBg: {
+       padding: 20,
+       flex: 1,
+       flexDirection: 'column',
+       alignItems: 'stretch',
+       backgroundColor: 'rgba(0, 0, 0, 0.5)',
+       justifyContent: 'center'
+   },
+
+   androidModal: {
+       borderRadius: 20,
+       flexDirection: 'column',
+       justifyContent: 'flex-start',
+       alignItems: 'stretch',
+       backgroundColor: '#fff',
+       maxHeight: '95%'
+   }
+}
+```
+
