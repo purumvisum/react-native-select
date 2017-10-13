@@ -24,6 +24,10 @@ export default class Select  extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        if (!this.props.data) {
+            throw new SyntaxError('Please specify data attribute. It is required.');
+        }
+
         this.state = {
             animatedOpacity: new Animated.Value(0),
             animatedTopPos: new Animated.Value(0),
@@ -40,7 +44,7 @@ export default class Select  extends React.PureComponent {
     _toggleOptions() {
         if (this.state.openSelect) {
             this.setState({
-                height: this.props.selectOptionsHeight
+                height: this.props.selectOptionsHeight ? this.props.selectOptionsHeight : 300
             })
         }
         this.setState({
@@ -80,7 +84,7 @@ export default class Select  extends React.PureComponent {
         });
 
         // Custom select action
-        this.props.onSelect(item)
+        this.props.onSelect ? this.props.onSelect(item) : () => {return true}
 
         this._toggleOptions();
     }
@@ -118,9 +122,9 @@ export default class Select  extends React.PureComponent {
             <TouchableWithoutFeedback
                 onPress = { this._onSelectInputPress }>
                 <View
-                    style = { [styles.selectInput, this.props.styles.selectInput] }
+                    style = { [styles.selectInput] }
                 >
-                    <Text style = { [styles.selectInputText, this.props.styles.selectInputText]}>
+                    <Text style = { [styles.selectInputText]}>
                         {this.state.selectedValue}
                     </Text>
                 </View>
@@ -156,8 +160,7 @@ export default class Select  extends React.PureComponent {
                         top: this.state.animatedTopPos,
                         height: this.state.height
                     },
-                    styles.optionsWrapper,
-                    this.props.styles.optionsWrapper
+                    styles.optionsWrapper
                 ]}>
 
                 <View style={styles.triangle} />
@@ -172,10 +175,10 @@ export default class Select  extends React.PureComponent {
             <Animated.View
                 style = {[{
                     transform: [{rotate: spin}]
-                }, styles.arrowIconWrapper, this.props.styles.arrowIconWrapper ]}>
+                }, styles.arrowIconWrapper]}>
             <Icon
                 style={[
-                    styles.arrowIcon, this.props.styles.arrowIcon
+                    styles.arrowIcon
                 ]}
                 name={'keyboard-arrow-down'}/>
         </Animated.View>
