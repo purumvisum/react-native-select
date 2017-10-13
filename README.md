@@ -1,7 +1,9 @@
 # react-native-select
 > A simple RN component for select items from a list that represented in dropdown on ios and modal window for android
 
+### ios demo
 ![Demo](https://github.com/purumvisum/react-native-select/blob/develop/ios.gif)
+### android demo
 ![Demo](https://github.com/purumvisum/react-native-select/blob/develop/android.gif)
 
 # Instalation
