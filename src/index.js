@@ -1,342 +1,190 @@
-import React from 'react';
+'use strict';
 
-import EditableFlatListItem from './editableFlatListItem';
-import ActionsBar from './actionsBar';
-
+// import React, { Component } from 'react';
 import {
-    Animated,
-    FlatList,
     View,
-    Alert,
-    Text
+    Text,
+    TouchableWithoutFeedback,
+    FlatList,
+    Animated,
+    Modal,
+    Platform,
+    Keyboard
 } from 'react-native';
 
-import styles from './styles';
-import SearchBar from './searchBar';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default class EditableFlatList extends React.Component {
+const React = require('react');
+
+import styles from './styles';
+import Option from './option';
+
+export default class Select  extends React.PureComponent {
 
     constructor(props) {
         super(props);
+
         this.state = {
-            editingMode: false, // turn on long tap
-            selectAll: false,
-            itemsList: this.props.itemsList,
-            iconSize: new Animated.Value(0),
-            iconWidth: this.props.iconWidth || 50,
-            topActionBarAnimation: new Animated.Value(0),
-            actionBarHeight: 50,
-            topSearchBarAnimation: new Animated.Value(0),
-            searchBarHeight: 50,
-            refreshing: false,
-            searchText: ''
+            animatedOpacity: new Animated.Value(0),
+            animatedTopPos: new Animated.Value(0),
+            spinValue: new Animated.Value(0),
+            openSelect: false,
+            selectedValue: this.props.data[0],
         };
 
-        this._sortItems = this._sortItems.bind(this);
-        this._editModeOn = this._editModeOn.bind(this);
+        this._toggleOptions = this._toggleOptions.bind(this);
         this._renderItemComponent = this._renderItemComponent.bind(this);
-        this._editingModeOff = this._editingModeOff.bind(this);
-        this._onselectAll = this._onselectAll.bind(this);
-        this._onRemoveRow = this._onRemoveRow.bind(this);
-        this._onRefresh = this._onRefresh.bind(this);
-        this._onSearchTextChange = this._onSearchTextChange.bind(this);
-        this._onCleanSearch = this._onCleanSearch.bind(this);
-
+        this._onSelectInputPress = this._onSelectInputPress.bind(this);
     }
 
-    componentWillMount() {
-        this._sortItems();
-    }
-
-    componentDidMount() {
-        this.state.topSearchBarAnimation.setValue(this.state.searchBarHeight);
-    }
-
-    componentWillReceiveProps(nextProps) {
+    _toggleOptions() {
+        if (this.state.openSelect) {
+            this.setState({
+                height: this.props.selectOptionsHeight
+            })
+        }
         this.setState({
-            itemsList: nextProps.itemsList
-        }, this._sortItems());
-    }
-
-    /**
-     * Turn On editing mode on items long press and select current item
-     *
-     * @param {string} itemId - id of pressed item
-     * @returns {void}
-     */
-    _editModeOn(itemId) {
-        this.setState({
-            editingMode: true
-        });
-
-        this._selectItem(itemId);
-
-        Animated.parallel([
-            Animated.spring(
-                this.state.iconSize, {
-                    tension: 70,
-                    toValue: this.state.iconWidth
-                }),
-            Animated.timing(
-                this.state.topActionBarAnimation, {
-                    toValue: this.state.actionBarHeight,
-                    duration: 250
-                }),
-            Animated.timing(
-                this.state.topSearchBarAnimation, {
-                    toValue: 0,
-                    duration: 250
-                })
-        ]).start();
-    }
-
-    /**
-     * Turn Off editing mode (Press 'cancel' button)
-     *
-     * @returns {void}
-     */
-    _editingModeOff() {
-        this.setState({
-            editingMode: false,
-            selectAll: false
-        });
-
+            openSelect: !this.state.openSelect
+        })
         Animated.parallel([
             Animated.timing(
-                this.state.iconSize,
-                {
-                    toValue: 0,
-                    delay: 2,
-                    duration: 250
-                }
-            ),
-            Animated.timing(
-                this.state.topActionBarAnimation, {
-                    toValue: 0,
-                    delay: 2,
-                    duration: 250
+                this.state.animatedOpacity, {
+                    toValue: this.state.openSelect ? 1 : 0,
+                    duration: 500
                 }),
             Animated.timing(
-                this.state.topSearchBarAnimation, {
-                    toValue: this.state.searchBarHeight,
-                    delay: 2,
-                    duration: 250
-                })
-        ]).start();
-    }
-
-    /**
-     * Mark all items as selected
-     *
-     * @returns {void}
-     */
-    _onselectAll() {
-
-        const selectedItemList = this.state.itemsList;
-
-        this.setState({
-            selectAll: !this.state.selectAll
-        });
-
-        if (this.state.editingMode) {
-            selectedItemList.map(item => {
-                item.selected = !this.state.selectAll;
-            });
-
-            this.setState({
-                itemsList: selectedItemList
-            });
-        }
-    }
-
-    /**
-     * Mark one item as selected
-     *
-     * @param {string} itemId - id of pressed item
-     * @returns {void}
-     */
-    _selectItem(itemId) {
-
-        const selectedItemList = this.state.itemsList;
-
-        selectedItemList.map(item => {
-            if (item.Id === itemId) {
-                item.selected = !item.selected;
-            }
-        });
-
-        if (this.state.editingMode) {
-            this.setState({
-                itemsList: selectedItemList
-            });
-        }
-
-    }
-
-    /**
-     * Remove selected rows one by one
-     *
-     * @returns {void}
-     */
-    _onRemoveRow() {
-
-        Alert.alert('All selected items will be permanently deleted. Are you sure?', null,
-            [
-                { text: 'No',
-                    onPress: () => { } },
+                this.state.animatedTopPos, {
+                    toValue: this.state.openSelect ? 80 : 60,
+                    duration: 500
+                }),
+            Animated.timing(
+                this.state.spinValue,
                 {
-                    text: 'Yes',
-                    onPress: () => {
-                        this.state.itemsList.forEach(item => {
-                            if (item.selected) {
-                                this.props.removeRow(item);
-                            }
-                        });
-                    }
-                }
-            ],
-            { cancelable: true }
-        );
-
-    }
-
-    /**
-     * Default FlatList function that called on page refresh
-     *
-     * @returns {void}
-     */
-    _onRefresh() {
-        this.setState({ refreshing: true });
-        this.props.onRefresh()
-            .catch(error => console.warn('Refresh error', error))
-            .then(() => {
-                this._sortItems();
-                this.setState({ refreshing: false });
-            });
-    }
-
-    /**
-     * Search by seted attribute
-     *
-     * @param {string} text - id of pressed item
-     * @returns {void}
-     */
-    _onSearchTextChange(text) {
-        this.setState({
-            searchText: text.text
-        },
-            () => {
-                const filter = this.props.searchBy ? item => {
-                    const prop = this.props.searchBy(item);
-
-                    return prop.includes(this.state.searchText);
-                } : () => true;
-
-                const filteredData = this.props.itemsList
-                    .filter(filter);
-
+                    toValue: this.state.openSelect ? 1 : 0,
+                    duration: 500
+                })
+        ]).start( () => {
+            // if it is try to close now
+            if (this.state.openSelect) {
                 this.setState({
-                    itemsList: filteredData
-                });
+                    height: 0
+                })
             }
-        );
-    }
-
-    /**
-     * Clean search criteria
-     *
-     * @returns {void}
-     */
-    _onCleanSearch() {
-        this.setState({
-            searchText: ' ',
-            itemsList: this.props.itemsList
         });
+
     }
 
-    /**
-     * Sort by seted attribute
-     *
-     * @returns {void}
-     */
-    _sortItems () {
-        const compare = this.props.orderBy ? (a, b) => {
-            const propA = this.props.orderBy(a);
-            const propB = this.props.orderBy(b);
-
-            if (propA > propB) {
-                return 1;
-            }
-            if (propA < propB) {
-                return -1;
-            }
-
-            return 0;
-        } : () => 0;
-
-        const orderedData = this.props.itemsList
-            .sort(compare);
-
+    _selectedItem(item) {
         this.setState({
-            itemsList: orderedData
+            selectedValue: item
         });
+
+        // Custom select action
+        this.props.onSelect(item)
+
+        this._toggleOptions();
     }
 
-    /**
-     * List row function
-     *
-     * @param {string} item - id of item
-     * @returns {ReactElement|null}
-     */
-    _renderItemComponent = ({ item }) => 
-        (<EditableFlatListItem
-            id = { item.Id }
-            selected = { item.selected }
-            height = { this.state.iconWidth + 15 }
-            selectAll = { this.state.selectAll }
-            iconSize = { this.state.iconSize }
-            onLongPress = { !this.props.preventSelectingActions ? () => this._editModeOn(item.Id) : () => true }
-            onPress = { !this.props.preventSelectingActions ? () => this._selectItem(item.Id) : () => true }
-            onRowClick = { () => this.props.clickOnRow(item) }
-            onRef = { ref => this.listItem = ref }
-            editingMode = { this.state.editingMode }
-            iconStyles = {this.props.iconStyles}
-            renderRow = { this.props.renderRow(item) } />)
+    _renderItemComponent (item) {
+        return (
+            <Option
+
+                onPress = { () => this._selectedItem(item.item)  }
+                value = { item.item }
+            />
+        )
+    }
+
+    _onSelectInputPress() {
+        Keyboard.dismiss()
+        this._toggleOptions()
+    }
 
     render() {
+        const spin = this.state.spinValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['0deg', '180deg'],
+        })
+
+
         return (
-            <View
-                style = { styles.editableFlatListWrapper } >
-                { this.props.searchBy
-                && <SearchBar
-                    searchAction = { this._onSearchTextChange }
-                    cleanSearch = { this._onCleanSearch }
-                    searchText = { this.state.searchText }
-                    topSearchBarAnimation = { this.state.topSearchBarAnimation } />
-                }
+        <View
+            style = {{
+                zIndex: 999999,
+            }}
 
-                <ActionsBar
-                    cancel = { this._editingModeOff }
-                    selectAll = { this._onselectAll }
-                    remove = { this._onRemoveRow }
-                    topActionBarAnimation = { this.state.topActionBarAnimation } />
+        >
 
-                { this.props.itemsList.length > 0
-                && <FlatList
-                    style = { styles.editableFlatList }
-                    extraData = { this.state }
-                    keyExtractor = { this.props.keyExtractor }
-                    data = { this.state.itemsList }
-                    onRefresh = { this._onRefresh }
-                    refreshing = { this.state.refreshing }
-                    renderItem = { this._renderItemComponent } />}
-                { this.props.itemsList.length < 1
-                && <View style = { styles.emptyEditableFlatList } >
-                    <Text style = { styles.emptyEditableFlatListText }>
-                        {this.props.emptyListText || 'No Items' }
+            <TouchableWithoutFeedback
+                onPress = { this._onSelectInputPress }>
+                <View
+                    style = { [styles.selectInput, this.props.styles.selectInput] }
+                >
+                    <Text style = { [styles.selectInputText, this.props.styles.selectInputText]}>
+                        {this.state.selectedValue}
                     </Text>
-                    </View>}
-            </View>
+                </View>
+
+
+            </TouchableWithoutFeedback>
+
+            { Platform.OS !== 'ios' &&
+            <Modal
+                presentationStyle = 'overFullScreen'
+                animationType="slide"
+                transparent={true}
+                visible={this.state.openSelect}
+                supportedOrientations={['portrait', 'landscape-right', 'landscape-left']}
+            >
+                <View style = {[styles.androidModalBg]}>
+                    <View style = {[styles.androidModal]}>
+                        <FlatList
+                            data={this.props.data}
+                            renderItem={this._renderItemComponent}
+                            keyExtractor={item => item.index}
+                        />
+                    </View>
+                </View>
+            </Modal>
+            }
+
+
+            <Animated.View
+                style = {[
+                    {
+                        opacity: this.state.animatedOpacity,
+                        top: this.state.animatedTopPos,
+                        height: this.state.height
+                    },
+                    styles.optionsWrapper,
+                    this.props.styles.optionsWrapper
+                ]}>
+
+                <View style={styles.triangle} />
+
+                <FlatList
+                    data={this.props.data}
+                    renderItem={this._renderItemComponent}
+                    keyExtractor={item => item.index}
+                />
+            </Animated.View>
+
+            <Animated.View
+                style = {[{
+                    transform: [{rotate: spin}]
+                }, styles.arrowIconWrapper, this.props.styles.arrowIconWrapper ]}>
+            <Icon
+                style={[
+                    styles.arrowIcon, this.props.styles.arrowIcon
+                ]}
+                name={'keyboard-arrow-down'}/>
+        </Animated.View>
+
+
+
+        </View>
+
         );
     }
 }
+

@@ -1,129 +1,85 @@
 export default ({
-    editableFlatListWrapper: {
-        flex: 1,
-        flexWrap: 'wrap',
-        flexDirection: 'column'
-    },
+   selectItem : {
+       borderRadius: 5,
+       padding: 10
+   },
 
-    editableFlatList: {
-        flex: 1
-    },
-
-    emptyEditableFlatList: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        marginTop: 20,
-    },
-
-    emptyEditableFlatListText: {
+    selectItemText : {
         fontSize: 15,
-        color: '#393939',
-    },
-
-    itemRow: {
-        borderBottomColor: '#eee',
-        borderColor: 'transparent',
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        borderWidth: 1
-    },
-
-    itemIconContainer: {
-        flex: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-        overflow: 'hidden',
-        backgroundColor: '#4090ff',
-        opacity: 0.3,
-        borderRadius: 70,
-        padding: 0,
-        borderStyle: 'solid'
-    },
-
-    itemIconContainerChecked: {
-        opacity: 0.8
-    },
-
-    itemIcon: {
-        fontSize: 40,
-        top: 0,
-        color: 'white',
-        padding: 0,
-        margin: 0
-    },
-
-    itemRowTextContainer: {
-        flex: 1
-    },
-
-    actionBar: {
-        flex: 0,
-        overflow: 'hidden',
-        zIndex: 999,
-        backgroundColor: '#f1eeef',
-        flexDirection: 'row',
-        justifyContent: 'flex-start'
-    },
-
-    actionBarItem: {
-        flex: 1,
-        padding: 4,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRightWidth: 1,
-        borderColor: '#d7d3d6'
-    },
-
-    actionBarItemIcon: {
-        fontSize: 20,
-        color: '#7e7e7e'
-    },
-
-    actionBarItemText: {
-        fontSize: 10,
-        color: '#7e7e7e'
-    },
-
-    searchBoxWrapper: {
-        flex: 0,
-        overflow: 'hidden'
-    },
-
-    searchBox: {
-
         padding: 10,
-        flex: 0,
-        backgroundColor: '#d7d7d7'
     },
 
-    searchIcon: {
+    selectInput: {
+        flex: 1,
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        height: 3000,
+        zIndex: 99999,
+        padding: 30,
+        borderBottomWidth: 1,
+        borderBottomColor: '#c0c0c0',
+    },
+
+    selectInputText: {
+        fontSize: 17,
+        color: '#fff'
+    },
+
+    optionsWrapper : {
         position: 'absolute',
-        zIndex: 999,
-        top: 12,
-        fontSize: 25,
-        color: '#a2a2a2',
-        backgroundColor: 'transparent'
+        flex: 1,
+        width: '100%',
+        zIndex: 999999,
+        alignItems: "stretch",
+        backgroundColor: '#fff',
+        borderRadius: 5,
+    },
+    triangle: {
+        top: -10,
+        right: -10,
+        width: 0,
+        height: 0,
+        backgroundColor: 'transparent',
+        borderStyle: 'solid',
+        borderLeftWidth: 15,
+        borderRightWidth: 15,
+        borderBottomWidth: 15,
+        borderLeftColor: 'transparent',
+        borderRightColor: 'transparent',
+        borderBottomColor: '#fff'
     },
 
-    searchIconLeft: {
-        left: 10
+    arrowIconWrapper: {
+        backgroundColor: 'transparent',
+        position:'absolute',
+        justifyContent: 'center',
+        flexDirection: "row",
+        alignSelf: 'center',
+        right: 0,
+        top: 10,
+        flex:1,
     },
 
-    searchIconRight: {
-        right: 10
+    arrowIcon: {
+        color: '#295DA5',
+        fontSize: 40
     },
 
-    searchBoxInput: {
-        padding: 0,
-        paddingLeft: 25,
-        height: 30,
-        borderRadius: 10,
-        borderWidth: 0,
-        backgroundColor: '#fff'
+    androidModalBg: {
+        padding: 20,
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center'
+    },
+
+    androidModal: {
+        borderRadius: 20,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        backgroundColor: '#fff',
+        maxHeight: '95%'
     }
-
 });

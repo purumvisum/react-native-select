@@ -1,7 +1,7 @@
 {
-  "name": "react-native-multiselect-flatlist",
+  "name": "react-native-select",
   "version": "1.0.0",
-  "description": "Availiable multiselect with menu on long tap on FlatList item",
+  "description": "Simple select for IOS and Android",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
