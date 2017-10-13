@@ -94,7 +94,6 @@ export default class Select  extends React.PureComponent {
     _renderItemComponent (item) {
         return (
             <Option
-
                 onPress = { () => this._selectedItem(item.item)  }
                 value = { item.item }
             />
@@ -141,13 +140,14 @@ export default class Select  extends React.PureComponent {
                 transparent={true}
                 visible={this.state.openSelect}
                 supportedOrientations={['portrait', 'landscape-right', 'landscape-left']}
+                onRequestClose={() => { return true }}
             >
                 <View style = {[styles.androidModalBg]}>
                     <View style = {[styles.androidModal]}>
                         <FlatList
                             data={this.props.data}
                             renderItem={this._renderItemComponent}
-                            keyExtractor={item => item.index}
+                            keyExtractor={(item, index) => item.item}
                         />
                     </View>
                 </View>
