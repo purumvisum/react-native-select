@@ -86,6 +86,6 @@ export default ({
         justifyContent: 'flex-start',
         alignItems: 'stretch',
         backgroundColor: '#fff',
-        maxHeight: '95%'
+        maxHeight: '70%'
     }
 });
