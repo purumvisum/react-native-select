@@ -16,24 +16,30 @@ export default ({
         height: 3000,
         zIndex: 99999,
         padding: 30,
-        borderBottomWidth: 1,
-        borderBottomColor: '#c0c0c0',
     },
 
     selectInputText: {
         fontSize: 17,
-        color: '#fff'
+        color: '#000'
     },
 
     optionsWrapper : {
         position: 'absolute',
         flex: 1,
-        width: '100%',
+        width: '90%',
+        marginLeft: '5%',
         zIndex: 999999,
+        justifyContent: 'center',
         alignItems: "stretch",
         backgroundColor: '#fff',
         borderRadius: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: .8,
+        shadowRadius: 7,
+
     },
+   
     triangle: {
         top: -10,
         right: -10,
@@ -61,7 +67,7 @@ export default ({
     },
 
     arrowIcon: {
-        color: '#295DA5',
+        color: '#7E7E7E',
         fontSize: 40
     },
 
