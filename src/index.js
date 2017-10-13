@@ -42,39 +42,41 @@ export default class Select  extends React.PureComponent {
     }
 
     _toggleOptions() {
-        if (this.state.openSelect) {
-            this.setState({
-                height: this.props.selectOptionsHeight ? this.props.selectOptionsHeight : 300
-            })
-        }
         this.setState({
             openSelect: !this.state.openSelect
-        })
-        Animated.parallel([
-            Animated.timing(
-                this.state.animatedOpacity, {
-                    toValue: this.state.openSelect ? 1 : 0,
-                    duration: 500
-                }),
-            Animated.timing(
-                this.state.animatedTopPos, {
-                    toValue: this.state.openSelect ? 80 : 60,
-                    duration: 500
-                }),
-            Animated.timing(
-                this.state.spinValue,
-                {
-                    toValue: this.state.openSelect ? 1 : 0,
-                    duration: 500
-                })
-        ]).start( () => {
-            // if it is try to close now
+        }, () => {
             if (this.state.openSelect) {
                 this.setState({
-                    height: 0
+                    height: this.props.selectOptionsHeight ? this.props.selectOptionsHeight : 300
                 })
             }
-        });
+
+            Animated.parallel([
+                Animated.timing(
+                    this.state.animatedOpacity, {
+                        toValue: this.state.openSelect ? 1 : 0,
+                        duration: 500
+                    }),
+                Animated.timing(
+                    this.state.animatedTopPos, {
+                        toValue: this.state.openSelect ? 80 : 60,
+                        duration: 500
+                    }),
+                Animated.timing(
+                    this.state.spinValue,
+                    {
+                        toValue: this.state.openSelect ? 1 : 0,
+                        duration: 500
+                    })
+            ]).start( () => {
+                // if it is try to close now
+                if (!this.state.openSelect) {
+                    this.setState({
+                        height: 0
+                    })
+                }
+            });
+        })
 
     }
 
