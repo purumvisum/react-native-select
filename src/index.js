@@ -160,8 +160,8 @@ export default class Select extends React.PureComponent {
                     </View>
                 </Modal>
                 }
-
-                <Animated.View
+                { Platform.OS === 'ios'
+                && <Animated.View
                     style = { [
                         {
                             opacity: this.state.animatedOpacity,
@@ -178,6 +178,7 @@ export default class Select extends React.PureComponent {
                         renderItem = { this._renderItemComponent }
                         keyExtractor = {  item => { return item } } />
                 </Animated.View>
+                }
 
                 <Animated.View
                     style = { [ {
