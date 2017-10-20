@@ -155,7 +155,7 @@ export default class Select extends React.PureComponent {
                             <FlatList
                                 data = { this.props.data }
                                 renderItem = { this._renderItemComponent }
-                                keyExtractor = { (item, index) => item.item } />
+                                keyExtractor = {  item => { return item } } />
                         </View>
                     </View>
                 </Modal>
@@ -176,7 +176,7 @@ export default class Select extends React.PureComponent {
                     <FlatList
                         data = { this.props.data }
                         renderItem = { this._renderItemComponent }
-                        keyExtractor = { item => item.index } />
+                        keyExtractor = {  item => { return item } } />
                 </Animated.View>
 
                 <Animated.View
