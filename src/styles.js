@@ -35,7 +35,6 @@ export default ({
         position: 'absolute',
         flex: 1,
         width: '90%',
-        marginLeft: '5%',
         zIndex: 999999,
         justifyContent: 'center',
         alignItems: 'stretch',
